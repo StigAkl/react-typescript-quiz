@@ -1,14 +1,17 @@
 import React from "react";
+import { IUserAnswer } from '../App'; 
 
 interface IProps {
   question: string;
   answers: string[];
-  callback: any;
-  userAnswer: any;
+  callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  userAnswer: IUserAnswer | undefined;
   questionNr: number;
   totalQuestions: number;
 }
 
+
+//This !! was pretty cool, basically the same as userAnswer ? true : false; 
 const QuestionCard: React.FC<IProps> = ({
   question,
   answers,
@@ -22,11 +25,14 @@ const QuestionCard: React.FC<IProps> = ({
       Question: {questionNr} / {totalQuestions}
     </p>
     <p dangerouslySetInnerHTML={{ __html: question }} />
-
     <div>
-      {answers.map((answer) => (
-        <div>
-          <button disabled={userAnswer} onClick={callback}>
+
+      {!!userAnswer && userAnswer.correct && (<p>Correct!</p>)}
+      {!!userAnswer && userAnswer.correct && (<p>Wrong!</p>)}
+      
+      {answers.map((answer, i) => (
+        <div key={answer}>
+          <button disabled={!!userAnswer} value={answer} onClick={callback}>
             <span dangerouslySetInnerHTML={{ __html: answer }} />
           </button>
         </div>
